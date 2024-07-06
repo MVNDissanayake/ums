@@ -1,10 +1,10 @@
 <?php require_once('inc/connection.php'); ?>
 <?php
 
-    $first_name = 'Isuru tharanga';
-    $last_name = 'Dissanayake';
-    $email = 'isurutharanga@gmail.com';
-    $password = 'idpassword';
+    $first_name = 'Neranjan';
+    $last_name = 'Dissanayke';
+    $email = 'disanayakanuwan@gmail.com@gmail.com';
+    $password = 'ndpassword';
     $is_deleted = 0;
 
     $hashed_password = sha1($password);
