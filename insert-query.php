@@ -3,7 +3,7 @@
 
     $first_name = 'Neranjan';
     $last_name = 'Dissanayke';
-    $email = 'disanayakanuwan@gmail.com@gmail.com';
+    $email = 'disanayakanuwan@gmail.com';
     $password = 'ndpassword';
     $is_deleted = 0;
 
