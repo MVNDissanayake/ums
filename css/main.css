@@ -1,3 +1,6 @@
+* {
+    margin: 0;
+}
 body {
 
     font-family: Arial, Helvetica, sans-serif;
@@ -5,7 +8,11 @@ body {
 
 
 }
-p.error{
+p {
+    margin-bottom: 15px;
+
+}
+p.error {
 
     background: red;
     color: white;
@@ -29,4 +36,18 @@ button{
     width: 100%;
     padding: 5px;
     box-sizing: border-box;
+}
+header{
+
+    background: #eee;
+    overflow: auto;
+    padding: 10px;
+}
+
+header .appname {
+    float: left;
+
+}
+header .loggedin {
+    float: right;
 }

@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <?php require_once('inc/connection.php'); ?>
 <?php
 
@@ -41,6 +42,9 @@ if (isset($_POST['submit'])) {
         
                 if(mysqli_num_rows($result_set) == 1) {
                         //valied user found
+                        $user = mysqli_fetch_assoc($result_set);
+                        $_SESSION['user_id'] = $user['id'];
+                        $_SESSION['first_name'] = $user['first_name'];
                         //rederect to user.php
                         header('location: users.php');
                     } else {
