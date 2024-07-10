@@ -1,5 +1,6 @@
 <?php session_start(); ?>
 <?php require_once('inc/connection.php'); ?>
+<?php require_once('inc/functions.php'); ?>
 <?php
 
 //cheack for form submitions
@@ -37,14 +38,23 @@ if (isset($_POST['submit'])) {
 
             $result_set = mysqli_query($connection, $query);
         
-            if($result_set) {
                 // query Sucssesfull
+                verify_query($result_set);
         
                 if(mysqli_num_rows($result_set) == 1) {
                         //valied user found
                         $user = mysqli_fetch_assoc($result_set);
                         $_SESSION['user_id'] = $user['id'];
                         $_SESSION['first_name'] = $user['first_name'];
+                        //updating last login
+
+                        $query = "UPDATE user SET last_login = NOW() ";
+                        $query .= "WHERE id = {$_SESSION['user_id']} LIMIT 1";
+
+                        $result_set = mysqli_query($connection, $query);
+
+                        verify_query($result_set);
+
                         //rederect to user.php
                         header('location: users.php');
                     } else {
@@ -52,12 +62,9 @@ if (isset($_POST['submit'])) {
                         $errors[] = 'invalied Username / password';
                     }
 
-            } else {
-
-                $errors[] = 'Database Quary failed';
-        }
+            } 
     }       
-}
+
 
 ?>
 <!DOCTYPE html>
@@ -85,12 +92,12 @@ if (isset($_POST['submit'])) {
                 ?>
 
                 <p>
-                    <label for="">Username:</lebel>
+                    <label for="">Username:</label>
                     <input type="text" name="email" id="" placeholder="email Address">
                 </p>
 
                 <p>
-                    <label for="">Password:</lebel>
+                    <label for="">Password:</label>
                     <input type="password" name="password" id="" placeholder="password">
                 </p>
 

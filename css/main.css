@@ -4,7 +4,7 @@
 body {
 
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
+    font-size: 16px;
 
 
 }
@@ -51,3 +51,57 @@ header .appname {
 header .loggedin {
     float: right;
 }
+main {
+    width: 1000px;
+    margin: 30px auto; 
+
+}
+main h1{
+
+    margin-bottom: 20px;
+    font-size: 50px;
+
+}
+main h1 span{
+
+    font-size: 20px;
+}
+table.masterlist {
+
+    width: 100;
+    border-collapse: collapse;
+}
+table.masterlist th{
+    background-color: #aaa;
+    text-align: left;
+
+}
+table.masterlist th, table.masterlist td {
+    padding: 10px;
+    border-bottom: 1px solid #aaa;
+}
+
+form.userform label{
+
+    width: 30%;
+
+}
+form.userform input{
+
+    width: 60%;
+
+}
+form.userform label{
+    width: 30%;
+    float: left;
+}
+form.userform input{
+    width: 60%;
+}
+form.userform button{
+    width: 200px;
+}
+
+
+
+
