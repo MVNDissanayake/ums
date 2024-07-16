@@ -12,6 +12,12 @@ p {
     margin-bottom: 15px;
 
 }
+
+div.errmsg{
+
+    color: red;
+
+}
 p.error {
 
     background: red;

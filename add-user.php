@@ -19,25 +19,28 @@
 
         //checking required fields
         
-        $req_feilds = array('first_name', 'last_name', 'email', 'password');
+        $req_fields = array('first_name', 'last_name', 'email', 'password');
 
-        foreach ($req_feilds as $field) {
-            
+        $errors = array_merge($errors, check_req_fields($req_fields));
+
+        /*foreach ($req_fields as $field) {        
             if(empty(trim($_POST[$field]))) {
                 $errors[] = $field . ' is required';
             }
-        } 
-
+        }*/
+ 
         // checking max Length
 
-        $max_len_feilds = array('first_name' =>50, 'last_name' =>100, 'email'=>100, 'password'=>40);
+        $max_len_fields = array('first_name' =>50, 'last_name' =>100, 'email'=>100, 'password'=>40);
 
-         foreach ($max_len_feilds as $field =>$max_len) {
+        $errors = array_merge($errors, check_max_len($max_len_fields));
+
+        /* foreach ($max_len_fields as $field =>$max_len) {
             
             if(strlen(trim($_POST[$field])) > $max_len) {
                 $errors[] = $field . 'must be less than' . $max_len . 'characters';
             }
-        }
+        }*/
         
         //checking email address
 
@@ -120,12 +123,16 @@
         <?php
 
             if (!empty($errors)) {
-                echo '<div class=errmsg>';
+
+                display_errors($errors);
+
+            /*    echo '<div class=errmsg>';
                 echo '<b>There were errors on your form.</b><br>';
                 foreach ($errors as $error) {
                     echo $error.'<br>';
                 }
-                echo '</div>';
+                echo '</div>'; */
+
             }
 
         ?>
