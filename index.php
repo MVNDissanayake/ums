@@ -36,6 +36,10 @@ if (isset($_POST['submit'])) {
                 AND password = '{$hashed_password}'
                 LIMIT 1 ";
 
+            /*echo $query;
+            die(); */
+            // echo before exiqute the quary     
+
             $result_set = mysqli_query($connection, $query);
         
                 // query Sucssesfull

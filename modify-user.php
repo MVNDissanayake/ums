@@ -17,8 +17,8 @@
 
         $result_set = mysqli_query($connection, $query);
 
-        if($result_set){
-            if(mysqli_num_rows($result_set)==1){
+        if($result_set)  {
+            if(mysqli_num_rows($result_set)==1) {
                 //user found
                 $result = mysqli_fetch_assoc($result_set);
                 $first_name = $result['first_name'];
@@ -39,7 +39,7 @@
 
     if (isset($_POST['submit'])) {
 
-    $user_id = $_POST['first_name'];    
+    $user_id = $_POST['user_id'];    
     $first_name = $_POST['first_name'];
     $last_name = $_POST['last_name'];
     $email = $_POST['email'];    
@@ -96,12 +96,11 @@
             $last_name = mysqli_real_escape_string($connection, $_POST['last_name']);
             // Email address already sanitized.....
 
-            $query = "UPDATE user SET";
+            $query = "UPDATE user SET ";
             $query .= "first_name = '{$first_name}', ";
             $query .= "last_name = '{$last_name}', ";
-            $query .= "email = '{$email}', ";
-            $query .= "WHERE id = '{$user_id}', LIMIT 1 ";
-
+            $query .= "email = '{$email}' ";
+            $query .= "WHERE id = '{$user_id}' LIMIT 1 ";
 
             $result = mysqli_query($connection, $query);
 
@@ -180,7 +179,7 @@
             </p>
             <p>
                 <label for="">password: </label>
-                <span>********</span> | <a href="change-password.php">Change Password</a>
+                <span>********</span> | <a href="change-password.php?user_id=<?php echo $user_id;?>">Change Password</a>
             </p>
             <p>
                 <label for="">&nbsp;</label>

@@ -4,23 +4,49 @@
 <?php
 
     $errors = array();
+    $user_id = '';
     $first_name = '';
     $last_name = '';
     $email = '';    
     $password = '';
 
+    if(isset($_GET['user_id'])) {
+        // getting the user information
+        $user_id = mysqli_real_escape_string($connection, $_GET['user_id']);
+        $query = "SELECT * FROM user WHERE id = {$user_id} LIMIT 1";
+
+        $result_set = mysqli_query($connection, $query);
+
+        if($result_set)  {
+            if(mysqli_num_rows($result_set)==1) {
+                //user found
+                $result = mysqli_fetch_assoc($result_set);
+                $first_name = $result['first_name'];
+                $last_name = $result['last_name'];
+                $email = $result['email'];    
+                
+
+            } else {
+                //user not found
+                header('Location: users.php?=user_not_found');    
+            }
+        } else {
+            // query unsuccesfull
+            header('Location: users.php?=query_failed');
+        }
+    }
+
 
     if (isset($_POST['submit'])) {
 
-    $first_name = $_POST['first_name'];
-    $last_name = $_POST['last_name'];
-    $email = $_POST['email'];    
-    $password = $_POST['password'];
+    $user_id = $_POST['user_id'];  
+    $password = $_POST['password'];    
+      
+    
 
         //checking required fields
         
-        $req_fields = array('first_name', 'last_name', 'email', 'password');
-
+        $req_fields = array('user_id', 'password',);
         $errors = array_merge($errors, check_req_fields($req_fields));
 
         /*foreach ($req_fields as $field) {        
@@ -31,8 +57,7 @@
  
         // checking max Length
 
-        $max_len_fields = array('first_name' =>50, 'last_name' =>100, 'email'=>100, 'password'=>40);
-
+        $max_len_fields = array('password' =>40,);
         $errors = array_merge($errors, check_max_len($max_len_fields));
 
         /* foreach ($max_len_fields as $field =>$max_len) {
@@ -41,52 +66,26 @@
                 $errors[] = $field . 'must be less than' . $max_len . 'characters';
             }
         }*/
-        
-        //checking email address
 
-        if(!is_email($_POST['email'])){
-            $errors[] = 'Email address is inccorect';
-        }
-
-        // checking if email address already exists
-
-        $email = mysqli_real_escape_string($connection, $_POST['email']);
-        $query = "SELECT *FROM user WHERE email ='{$email}' LIMIT 1";
-
-        $result_set = mysqli_query($connection, $query);
-
-        if($result_set){
-            if(mysqli_num_rows($result_set) == 1){
-                $errors[] =  'Email address already exists';
-            }
-
-        }
-
-        if(empty($errors)){
+        if(empty($errors)) {
             // No errors found..... adding new record
-            $first_name = mysqli_real_escape_string($connection, $_POST['first_name']);
-            $last_name = mysqli_real_escape_string($connection, $_POST['last_name']);
             $password = mysqli_real_escape_string($connection, $_POST['password']);
-            // Email address already sanitized.....
             $hashed_password = sha1($password);
+            // Email address already sanitized.....
 
-            $query = "INSERT INTO user ( ";
-            $query .= "first_name, last_name, email, password, is_deleted";
-            $query .= ") VALUES (";
-            $query .= "'{$first_name}', '{$last_name}','{$email}','{$hashed_password}',0 ";
-            $query .= ")";
-            
+            $query = "UPDATE user SET ";
+            $query .= "password = '{$hashed_password}' ";
+            $query .= "WHERE id = '{$user_id}' LIMIT 1 ";
+
             $result = mysqli_query($connection, $query);
 
-            if($result){
+            if($result) {
                 // query successful..... rederecting to users page 
-                header('Location: users.php?user_added=true');
+                header('Location: users.php?user_modified=true');
             } else {
-                $errors[] = 'failed to add the new record.';
+                $errors[] = 'failed to Update the password.';
             }
-
         }
-
     }
         
     /*  if (empty(trim($_POST['first_name']))) {
@@ -110,7 +109,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New User</title>
+    <title>Change Password</title>
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
@@ -119,7 +118,7 @@
         <div class="loggedin">Welcome Username <?php echo $_SESSION['first_name']; ?><a href="logout.php">Log out</a></div>
     </header>
     <main>
-        <h1>Add New User<span><a href="users.php"> < Back to user list</a></span></h1>
+        <h1><span>Change Password<a href="users.php"> < Back to user list</a></span></h1>
         <?php
 
             if (!empty($errors)) {
@@ -136,27 +135,27 @@
             }
 
         ?>
-        <form action="add-user.php" method="post" class="userform">
+        <form action="change-password.php" method="post" class="userform">
+            <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
             <p>
                 <label for="">First Name: </label>
-                <input type="text" name="first_name" <?php echo 'value="'. $first_name .'"'?>>
+                <input type="text" name="first_name" <?php echo 'value="'. $first_name .'"'?> disabled >
 
             </p>
             <p>
                 <label for="">Last name: </label>
-                <input type="text" name="last_name"<?php echo 'value="'. $last_name .'"'?>>
+                <input type="text" name="last_name"<?php echo 'value="'. $last_name .'"'?> disabled >
             </p>
             <p>
                 <label for="">Email Address: </label>
-                <input type="text" name="email" <?php echo 'value="'. $email .'"'?>>
+                <input type="text" name="email" <?php echo 'value="'. $email .'"'?> disabled >
             </p>
             <p>
-                <label for="">New password: </label>
-                <input type="password" name="password">
-            </p>
+                <label for=""> New password: </label></p>
+                <input type="password" name="password" id="" >
             <p>
                 <label for="">&nbsp;</label>
-                <button type="submit" name="submit">Save</button>
+                <button type="submit" name="submit">Update Password</button>
             </p>
         </form>
 
